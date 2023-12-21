@@ -1,0 +1,33 @@
+import psutil
+from tabulate import tabulate
+
+def get_cpu_info():
+    cpu_info = psutil.cpu_percent(interval=1, percpu=True)
+    return cpu_info
+
+def get_memory_info():
+    memory_info = psutil.virtual_memory()
+    return memory_info
+
+def get_disk_info():
+    disk_info = psutil.disk_usage('/')
+    return disk_info
+
+def display_system_info():
+    cpu_info = get_cpu_info()
+    memory_info = get_memory_info()
+    disk_info = get_disk_info()
+
+  
+    table_data = [
+        ["CPU Core", "Usage (%)"],
+        *[(f"Core {i}", f"{usage}%") for i, usage in enumerate(cpu_info)],
+        ["Memory", f"{memory_info.percent}%"],
+        ["Disk", f"{disk_info.percent}%"]
+    ]
+
+   
+    print(tabulate(table_data, headers="firstrow", tablefmt="fancy_grid"))
+
+if __name__ == "__main__":
+    display_system_info()
